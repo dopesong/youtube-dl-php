@@ -187,43 +187,19 @@ class YoutubeDl
             }
         }
 
-        if ($parts = explode("\n", trim($process->getOutput()))) {
-            $mapper = new Mapper($this->downloadPath ?: getcwd());
-
-            if (count($parts) > 1) {
-                $videos = [];
-
-                foreach ($parts as $part) {
-                    $videoData = $this->jsonDecode($part);
-                    if (is_array($videoData)) {
-                        $videos[] = $mapper->map($videoData);
-                    }
-                }
-
-                return $videos;
-            }
-
-            $videoData = $this->jsonDecode(reset($parts));
-            if (is_array($videoData)) {
-                return $mapper->map($videoData);
-            }
-            
-            return false;
-        }
-
-        return false;
+        return $this->setEntities(trim($process->getOutput()))
     }
     
     /**
      * Set all entities by an output obtained with --print-json parameter
-     *
+     * or a process output
+     * 
      * @param $jsonOutput
      * @return array|bool|Entity\Video
      * @throws \Exception
      */
     public function setEntities($jsonOutput)
     {
-
         if ($parts = explode("\n", $jsonOutput)) {
             $mapper = new Mapper($this->downloadPath ?: getcwd());
 
