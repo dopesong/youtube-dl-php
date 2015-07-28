@@ -187,20 +187,7 @@ class YoutubeDl
             }
         }
 
-        return $this->setEntities(trim($process->getOutput()))
-    }
-    
-    /**
-     * Set all entities by an output obtained with --print-json parameter
-     * or a process output
-     * 
-     * @param $jsonOutput
-     * @return array|bool|Entity\Video
-     * @throws \Exception
-     */
-    public function setEntities($jsonOutput)
-    {
-        if ($parts = explode("\n", $jsonOutput)) {
+        if ($parts = explode("\n", trim($process->getOutput()))) {
             $mapper = new Mapper($this->downloadPath ?: getcwd());
 
             if (count($parts) > 1) {
@@ -220,7 +207,7 @@ class YoutubeDl
             if (is_array($videoData)) {
                 return $mapper->map($videoData);
             }
-
+            
             return false;
         }
 
